@@ -54,7 +54,7 @@ The following arguments are supported:
 
 * `name` - (Required) Name of the trigger.
 * `dataset` - (Required) The dataset this trigger is associated with.
-* `query_json` - (Required) A JSON object describng the query according to the [Query Specification](https://docs.honeycomb.io/api/query-specification/#fields-on-a-query-specification). While the JSON can be constructed manually, it is easiest to use the [`honeycombio_query`](../data-sources/query.md) data source.
+* `query` - (Required) A JSON object describng the query according to the [Query Specification](https://docs.honeycomb.io/api/query-specification/#fields-on-a-query-specification). While the JSON can be constructed manually, it is easiest to use the [`honeycombio_query`](terraform-provider-honeycombio/docs/data-sources/query_spec.md) data source.
 * `threshold` - (Required) A configuration block (described below) describing the threshold of the trigger.
 * `description` - (Optional) Description of the trigger.
 * `disabled` - (Optional) The state of the trigger. If true, the trigger will not be run. Defaults to false.

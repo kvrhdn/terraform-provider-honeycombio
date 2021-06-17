@@ -36,7 +36,7 @@ func TestAccHoneycombioBoard_basic(t *testing.T) {
 
 func testAccBoardConfig(dataset string) string {
 	return fmt.Sprintf(`
-data "honeycombio_query" "test" {
+data "honeycombio_query_spec" "test" {
   count = 2
 
   calculation {
@@ -58,13 +58,13 @@ resource "honeycombio_board" "test" {
   query {
     caption = "test query 0"
     dataset = "%s"
-    query_json = data.honeycombio_query.test[0].json
+    query_json = data.honeycombio_query_spec.test[0].json
   }
   query {
     caption     = "test query 1"
     query_style = "combo"
     dataset     = "%s"
-    query_json  = data.honeycombio_query.test[1].json
+    query_json  = data.honeycombio_query_spec.test[1].json
   }
 }`, dataset, dataset)
 }

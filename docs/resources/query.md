@@ -35,7 +35,7 @@ resource "honeycombio_query" "test_query" {
 The following arguments are supported:
 
 * `dataset` - (Required) The dataset this query is added to.
-* `query_json` - (Required) A JSON object describing the query according to the [Query Specification](https://docs.honeycomb.io/api/query-specification/#fields-on-a-query-specification). While the JSON can be constructed manually, it is easiest to use the [`honeycombio_query`](../data-sources/query.md) data source.
+* `query_json` - (Required) A JSON object describing the query according to the [Query Specification](https://docs.honeycomb.io/api/query-specification/#fields-on-a-query-specification). While the JSON can be constructed manually, it is easiest to use the [`honeycombio_query`](terraform-provider-honeycombio/docs/data-sources/query_spec.md) data source.
 
 ## Attribute Reference
 

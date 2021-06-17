@@ -40,7 +40,7 @@ func newTrigger() *schema.Resource {
 				Type:     schema.TypeBool,
 				Optional: true,
 			},
-			"query_json": {
+			"query": {
 				Type:     schema.TypeString,
 				Required: true,
 				ValidateDiagFunc: validateQueryJSON(func(q *honeycombio.QuerySpec) diag.Diagnostics {
@@ -172,7 +172,7 @@ func resourceTriggerRead(ctx context.Context, d *schema.ResourceData, meta inter
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	d.Set("query_json", encodedQuery)
+	d.Set("query", encodedQuery)
 
 	err = d.Set("threshold", flattenTriggerThreshold(t.Threshold))
 	if err != nil {
@@ -222,7 +222,7 @@ func resourceTriggerDelete(ctx context.Context, d *schema.ResourceData, meta int
 func expandTrigger(d *schema.ResourceData) (*honeycombio.Trigger, error) {
 	var query honeycombio.QuerySpec
 
-	err := json.Unmarshal([]byte(d.Get("query_json").(string)), &query)
+	err := json.Unmarshal([]byte(d.Get("query").(string)), &query)
 	if err != nil {
 		return nil, err
 	}

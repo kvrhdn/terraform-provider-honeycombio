@@ -175,7 +175,7 @@ func TestAccHoneycombioTrigger_validationErrors(t *testing.T) {
 
 func testAccTriggerConfigWithFrequency(dataset string, frequency int) string {
 	return fmt.Sprintf(`
-data "honeycombio_query" "test" {
+data "honeycombio_query_spec" "test" {
   calculation {
     op     = "AVG"
     column = "duration_ms"
@@ -187,7 +187,7 @@ resource "honeycombio_trigger" "test" {
   name    = "Test trigger from terraform-provider-honeycombio"
   dataset = "%s"
 
-  query_json = data.honeycombio_query.test.json
+  query = data.honeycombio_query_spec.test.json
 
   threshold {
     op    = ">"
@@ -210,7 +210,7 @@ resource "honeycombio_trigger" "test" {
 
 func testAccTriggerConfigWithCount(dataset string) string {
 	return fmt.Sprintf(`
-data "honeycombio_query" "test" {
+data "honeycombio_query_spec" "test" {
   calculation {
     op     = "COUNT"
   }
@@ -221,7 +221,7 @@ resource "honeycombio_trigger" "test" {
   name    = "Test trigger from terraform-provider-honeycombio"
   dataset = "%s"
 
-  query_json = data.honeycombio_query.test.json
+  query = data.honeycombio_query_spec.test.json
 
   threshold {
     op    = ">"
@@ -236,7 +236,7 @@ resource "honeycombio_trigger" "test" {
   name    = "Test trigger from terraform-provider-honeycombio"
   dataset = "%s"
 
-  query_json = <<EOF
+  query = <<EOF
 %s
 EOF
     
@@ -249,7 +249,7 @@ EOF
 
 func testAccTriggerConfigWithRecipientID(dataset, recipientID string) string {
 	return fmt.Sprintf(`
-data "honeycombio_query" "test" {
+data "honeycombio_query_spec" "test" {
   calculation {
     op     = "AVG"
     column = "duration_ms"
@@ -261,7 +261,7 @@ resource "honeycombio_trigger" "test" {
   name    = "Test trigger from terraform-provider-honeycombio"
   dataset = "%s"
 
-  query_json = data.honeycombio_query.test.json
+  query = data.honeycombio_query_spec.test.json
         
   threshold {
     op    = ">"

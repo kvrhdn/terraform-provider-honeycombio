@@ -37,7 +37,7 @@ func TestAccHoneycombioQueryAnnotation_update(t *testing.T) {
 
 func testAccResourceQueryAnnotationConfig(dataset string, name string) string {
 	return fmt.Sprintf(`
-data "honeycombio_query" "test" {
+data "honeycombio_query_spec" "test" {
   calculation {
     op     = "AVG"
     column = "duration_ms"
@@ -52,7 +52,7 @@ data "honeycombio_query" "test" {
 
 resource "honeycombio_query" "test" {
   dataset = "%s"
-  query_json = data.honeycombio_query.test.json
+  query_json = data.honeycombio_query_spec.test.json
 }
 
 resource "honeycombio_query_annotation" "test" {

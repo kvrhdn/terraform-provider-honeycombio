@@ -13,9 +13,9 @@ import (
 	"github.com/kvrhdn/terraform-provider-honeycombio/honeycombio/internal/hashcode"
 )
 
-func dataSourceHoneycombioQuery() *schema.Resource {
+func dataSourceHoneycombioQuerySpec() *schema.Resource {
 	return &schema.Resource{
-		ReadContext: dataSourceHoneycombioQueryRead,
+		ReadContext: dataSourceHoneycombioQuerySpecRead,
 
 		Schema: map[string]*schema.Schema{
 			"calculation": {
@@ -148,7 +148,7 @@ func dataSourceHoneycombioQuery() *schema.Resource {
 	}
 }
 
-func dataSourceHoneycombioQueryRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func dataSourceHoneycombioQuerySpecRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	calculations, err := extractCalculations(d)
 	if err != nil {
 		return diag.FromErr(err)
@@ -159,7 +159,7 @@ func dataSourceHoneycombioQueryRead(ctx context.Context, d *schema.ResourceData,
 		return diag.FromErr(err)
 	}
 
-	query := &honeycombio.QuerySpec{
+	querySpec := &honeycombio.QuerySpec{
 		Calculations:      calculations,
 		Filters:           filters,
 		FilterCombination: honeycombio.FilterCombination(d.Get("filter_combination").(string)),
@@ -172,20 +172,20 @@ func dataSourceHoneycombioQueryRead(ctx context.Context, d *schema.ResourceData,
 		Granularity:       extractOptionalInt(d, "granularity"),
 	}
 
-	if query.TimeRange != nil && query.StartTime != nil && query.EndTime != nil {
+	if querySpec.TimeRange != nil && querySpec.StartTime != nil && querySpec.EndTime != nil {
 		return diag.Errorf("specify at most two of time_range, start_time and end_time")
 	}
 
-	if query.TimeRange != nil && query.Granularity != nil {
-		if *query.Granularity > (*query.TimeRange / 10) {
+	if querySpec.TimeRange != nil && querySpec.Granularity != nil {
+		if *querySpec.Granularity > (*querySpec.TimeRange / 10) {
 			return diag.Errorf("granularity can not be greater than time_range/10")
 		}
-		if *query.Granularity < (*query.TimeRange / 1000) {
+		if *querySpec.Granularity < (*querySpec.TimeRange / 1000) {
 			return diag.Errorf("granularity can not be less than time_range/1000")
 		}
 	}
 
-	jsonQuery, err := encodeQuery(query)
+	jsonQuery, err := encodeQuery(querySpec)
 	if err != nil {
 		return diag.FromErr(err)
 	}

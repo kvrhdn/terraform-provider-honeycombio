@@ -13,7 +13,7 @@ locals {
   percentiles = ["P50", "P75", "P90", "P95"]
 }
 
-data "honeycombio_query" "query" {
+data "honeycombio_query_spec" "query" {
   count = length(local.percentiles)
 
   calculation {
@@ -63,7 +63,7 @@ The following arguments are supported:
 
 Each board configuration may have zero or more `query` blocks, which accepts the following arguments:
 
-* `query_json` - (Required) A JSON object describing the query according to the [Query Specification](https://docs.honeycomb.io/api/query-specification/#fields-on-a-query-specification). While the JSON can be constructed manually, it is easiest to use the [`honeycombio_query`](../data-sources/query.md) data source.
+* `query_json` - (Required) A JSON object describing the query according to the [Query Specification](https://docs.honeycomb.io/api/query-specification/#fields-on-a-query-specification). While the JSON can be constructed manually, it is easiest to use the [`honeycombio_query`](terraform-provider-honeycombio/docs/data-sources/query_spec.md) data source.
 * `dataset` - (Required) The dataset this query is associated with.
 * `caption` - (Optional) A description of the query that will be displayed on the board. Supports markdown.
 * `query_style` - (Optional) How the query should be displayed within the board, either `graph` (the default), `table` or `combo`.

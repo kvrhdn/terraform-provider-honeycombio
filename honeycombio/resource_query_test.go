@@ -40,7 +40,7 @@ func TestAccHoneycombioQuery_update(t *testing.T) {
 
 func testAccResourceQueryConfig(dataset string, duration int) string {
 	return fmt.Sprintf(`
-data "honeycombio_query" "test" {
+data "honeycombio_query_spec" "test" {
   calculation {
     op     = "AVG"
     column = "duration_ms"
@@ -55,7 +55,7 @@ data "honeycombio_query" "test" {
 
 resource "honeycombio_query" "test" {
   dataset = "%s"
-  query_json = data.honeycombio_query.test.json
+  query_json = data.honeycombio_query_spec.test.json
 }
 `, duration, dataset)
 }

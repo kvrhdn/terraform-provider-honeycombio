@@ -8,7 +8,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-func TestAccDataSourceHoneycombioQuery_basic(t *testing.T) {
+func TestAccDataSourceHoneycombioQuerySpec_basic(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:          testAccPreCheck(t),
 		ProviderFactories: testAccProviderFactories,
@@ -24,7 +24,7 @@ func TestAccDataSourceHoneycombioQuery_basic(t *testing.T) {
 }
 
 const testAccQueryConfig = `
-data "honeycombio_query" "test" {
+data "honeycombio_query_spec" "test" {
     calculation {
         op     = "AVG"
         column = "duration_ms"
@@ -63,7 +63,7 @@ data "honeycombio_query" "test" {
 }
 
 output "query_json" {
-    value = data.honeycombio_query.test.json
+    value = data.honeycombio_query_spec.test.json
 }`
 
 //Note: By default go encodes `<` and `>` for html, hence the `\u003e`
@@ -110,7 +110,7 @@ const expectedJSON string = `{
   "granularity": 30
 }`
 
-func TestAccDataSourceHoneycombioQuery_validationChecks(t *testing.T) {
+func TestAccDataSourceHoneycombioQuerySpec_validationChecks(t *testing.T) {
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:          testAccPreCheck(t),
 		ProviderFactories: testAccProviderFactories,
@@ -126,7 +126,7 @@ func TestAccDataSourceHoneycombioQuery_validationChecks(t *testing.T) {
 var testStepsQueryValidationChecks_calculation = []resource.TestStep{
 	{
 		Config: `
-data "honeycombio_query" "test" {
+data "honeycombio_query_spec" "test" {
   calculation {
     op     = "COUNT"
     column = "we-should-not-specify-a-column-with-COUNT"
@@ -137,7 +137,7 @@ data "honeycombio_query" "test" {
 	},
 	{
 		Config: `
-data "honeycombio_query" "test" {
+data "honeycombio_query_spec" "test" {
   calculation {
     op     = "AVG"
   }
@@ -150,7 +150,7 @@ data "honeycombio_query" "test" {
 var testStepsQueryValidationChecks_filter = []resource.TestStep{
 	{
 		Config: `
-data "honeycombio_query" "test" {
+data "honeycombio_query_spec" "test" {
   filter {
     column = "column"
     op     = "exists"
@@ -162,7 +162,7 @@ data "honeycombio_query" "test" {
 	},
 	{
 		Config: `
-data "honeycombio_query" "test" {
+data "honeycombio_query_spec" "test" {
   filter {
     column = "column"
     op     = ">"
@@ -173,7 +173,7 @@ data "honeycombio_query" "test" {
 	},
 	{
 		Config: `
-data "honeycombio_query" "test" {
+data "honeycombio_query_spec" "test" {
   filter {
     column        = "column"
     op            = ">"
@@ -186,7 +186,7 @@ data "honeycombio_query" "test" {
 	},
 	{
 		Config: `
-data "honeycombio_query" "test" {
+data "honeycombio_query_spec" "test" {
   filter {
     column        = "column"
     op            = "in"
@@ -200,7 +200,7 @@ data "honeycombio_query" "test" {
 
 func testStepsQueryValidationChecks_limit() []resource.TestStep {
 	var queryLimitFmt = `
-data "honeycombio_query" "test" {
+data "honeycombio_query_spec" "test" {
   limit = %d
 }`
 	return []resource.TestStep{
@@ -222,7 +222,7 @@ data "honeycombio_query" "test" {
 var testStepsQueryValidationChecks_time = []resource.TestStep{
 	{
 		Config: `
-data "honeycombio_query" "test" {
+data "honeycombio_query_spec" "test" {
   time_range = 7200
   start_time = 1577836800
   end_time   = 1577844000
@@ -232,7 +232,7 @@ data "honeycombio_query" "test" {
 	},
 	{
 		Config: `
-data "honeycombio_query" "test" {
+data "honeycombio_query_spec" "test" {
   time_range  = 120
   granularity = 13
 }
@@ -241,7 +241,7 @@ data "honeycombio_query" "test" {
 	},
 	{
 		Config: `
-data "honeycombio_query" "test" {
+data "honeycombio_query_spec" "test" {
   time_range  = 60000
   granularity = 59
 }
@@ -258,7 +258,7 @@ func appendAllTestSteps(steps ...[]resource.TestStep) []resource.TestStep {
 	return allSteps
 }
 
-func TestAccDataSourceHoneycombioQuery_filterOpInAndNotIn(t *testing.T) {
+func TestAccDataSourceHoneycombioQuerySpec_filterOpInAndNotIn(t *testing.T) {
 	dataset := testAccDataset()
 
 	resource.Test(t, resource.TestCase{
@@ -267,7 +267,7 @@ func TestAccDataSourceHoneycombioQuery_filterOpInAndNotIn(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: fmt.Sprintf(`
-data "honeycombio_query" "test" {
+data "honeycombio_query_spec" "test" {
   calculation {
     op = "COUNT"
   }
@@ -288,7 +288,7 @@ resource "honeycombio_board" "test" {
   name = "terraform-provider-honeycombio - Test honeycombio-query - filter ops in/not-in"
   query {
     dataset    = "%v"
-    query_json = data.honeycombio_query.test.json
+    query_json = data.honeycombio_query_spec.test.json
   }
 }`, dataset),
 			},
